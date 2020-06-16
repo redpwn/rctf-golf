@@ -52,7 +52,7 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
             raise CTFConfigurationError(response.get('message', 'The challenge is misconfigured'))
 
         solves = response['data']['solves']
-        if True:# not solves:
+        if not solves:
             # nobody has solved yet, so use current time delta
             solved_datetime = current_datetime
         else:
