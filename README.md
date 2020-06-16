@@ -4,6 +4,12 @@ rCTF-golf is a Python 3 library for developing CTF golfing challenges.
 
 # Installation
 
+## Automatic
+
+```sh
+pip3 install rctf-golf
+```
+
 ## Manual
 
 ```sh
