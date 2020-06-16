@@ -8,7 +8,7 @@ def readme():
         return f.read()
 
 setup(name = 'rctf-golf',
-    version = '1.0.1',
+    version = '1.0.2',
     description = 'a tool for developing golfing CTF challenges',
     long_description = readme(),
     long_description_content_type = 'text/markdown',
