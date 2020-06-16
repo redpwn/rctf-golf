@@ -39,7 +39,7 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
         if isinstance(debug, bool):
             debug = 24 * 3 # 3 days default
         
-        hours_in_ctf = debug
+        hours_in_ctf = int(debug)
         warnings.warn('DEBUG mode is enabled. rCTF-golf will assume the challenge is %d hours into the CTF.' % hours_in_ctf)
     else:
         # debug mode is disabled, calculate number of hours
