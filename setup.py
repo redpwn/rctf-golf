@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
+import setuptools
 
 setup(name = 'rctf-golf',
     version = '1.0.0',
