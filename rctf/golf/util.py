@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Author: Aaron Esau <python@aaronesau.com>
 
+'''
+This module helps with developing golf challenges when using the rCTF platform
+'''
+
 import datetime, os, warnings, json
 import requests, urllib.parse
 from typing import Callable, Union
