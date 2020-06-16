@@ -30,8 +30,6 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
 
     assert isinstance(start_datetime, datetime.datetime) == True
     current_datetime = datetime.datetime.utcnow()
-    if current_datetime < start_datetime:
-        raise CTFNotStartedError()
 
     # calculate the number of hours to plug into formula
     hours_in_ctf = 0
@@ -42,6 +40,9 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
         hours_in_ctf = int(debug)
         warnings.warn('DEBUG mode is enabled. rCTF-golf will assume the challenge is %d hours into the CTF.' % hours_in_ctf)
     else:
+        if current_datetime < start_datetime:
+            raise CTFNotStartedError()
+
         # debug mode is disabled, calculate number of hours
         response = json.loads(requests.get('{rctf_base_url}/api/v1/challs/{rctf_challenge_id}/solves?limit=1&offset=0'.format(
             rctf_base_url = rctf_base_url.rstrip('/'),
