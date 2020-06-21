@@ -61,7 +61,6 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
             solved_timestamp = solves[0]['createdAt'] # there should always be one solve because of the limit
             solved_datetime = datetime.datetime.utcfromtimestamp(solved_timestamp // 1000) # keep in utc
 
-        print(solved_datetime, start_datetime)
         if solved_datetime < start_datetime:
             raise CTFConfigurationError('The server thinks the CTF has started, but the challenge believes it has not')
 
