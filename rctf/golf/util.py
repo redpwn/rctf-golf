@@ -64,7 +64,7 @@ def calculate_limit(rctf_base_url: str, rctf_challenge_id: str, start_datetime: 
         if solved_datetime < start_datetime:
             raise CTFConfigurationError('The server thinks the CTF has started, but the challenge believes it has not')
 
-        hours_in_ctf = (solved_datetime - start_datetime).seconds // (60 * 60)
+        hours_in_ctf = (solved_datetime - start_datetime).total_seconds() // (60 * 60)
 
     assert hours_in_ctf >= 0
     return limit_function(int(hours_in_ctf)) # round down
