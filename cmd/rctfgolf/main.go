@@ -39,16 +39,15 @@ func main() {
 
 	program, err := expr.Compile(*expression, expr.Env(globals{}))
 	if err != nil {
-		panic(err)
+		fmt.Printf("Invalid expression: %v\n", err)
+		os.Exit(1)
 	}
 
-	result, err := rctfgolf.Calculate(*baseURL, *challID, func(t time.Duration) interface{} {
-		result, err := expr.Run(program, globals{Elapsed: t})
-		if err != nil {
-			panic(err)
-		}
-		return result
-	})
+	elapsed, err := rctfgolf.Calculate(*baseURL, *challID)
+	if err != nil {
+		panic(err)
+	}
+	result, err := expr.Run(program, globals{Elapsed: elapsed})
 	if err != nil {
 		panic(err)
 	}

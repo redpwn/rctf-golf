@@ -12,7 +12,7 @@ func unixMillisToTime(millis int64) time.Time {
 	return time.Unix(millis/1000, millis%1000*int64(time.Millisecond))
 }
 
-func CalculateWithClient(c *api.APIClient, chall string, mapper func(time.Duration) interface{}) (interface{}, error) {
+func CalculateWithClient(c *api.APIClient, chall string) (time.Duration, error) {
 	if debug, ok := os.LookupEnv("RCTF_GOLF_DEBUG"); ok {
 		elapsed, err := time.ParseDuration(debug)
 		if err != nil {
@@ -21,12 +21,12 @@ func CalculateWithClient(c *api.APIClient, chall string, mapper func(time.Durati
 		if int64(elapsed) < 0 {
 			panic("Cannot set debug with negative elapsed time!")
 		}
-		return mapper(elapsed), nil
+		return elapsed, nil
 	}
 
 	clientConfig, err := c.GetClientConfig()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	start := unixMillisToTime(clientConfig.StartTime)
 	solves, err := c.GetChallengeSolves(chall, api.GetChallengeSolvesParams{
@@ -34,7 +34,7 @@ func CalculateWithClient(c *api.APIClient, chall string, mapper func(time.Durati
 		Offset: 0,
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	var current time.Time
 	if len(solves) > 0 {
@@ -43,9 +43,9 @@ func CalculateWithClient(c *api.APIClient, chall string, mapper func(time.Durati
 		current = time.Now()
 	}
 	elapsed := current.Sub(start)
-	return mapper(elapsed), nil
+	return elapsed, nil
 }
 
-func Calculate(baseURL string, chall string, mapper func(time.Duration) interface{}) (interface{}, error) {
-	return CalculateWithClient(api.NewClient(baseURL), chall, mapper)
+func Calculate(baseURL string, chall string) (time.Duration, error) {
+	return CalculateWithClient(api.NewClient(baseURL), chall)
 }
