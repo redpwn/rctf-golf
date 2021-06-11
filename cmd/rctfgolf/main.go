@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"time"
 
@@ -9,10 +10,6 @@ import (
 	rctfgolf "github.com/redpwn/rctf-golf"
 	"github.com/spf13/pflag"
 )
-
-type globals struct {
-	Elapsed time.Duration
-}
 
 func main() {
 	baseURL := pflag.StringP("base-url", "u", "", "Base URL of rCTF")
@@ -37,7 +34,15 @@ func main() {
 		os.Exit(2)
 	}
 
-	program, err := expr.Compile(*expression, expr.Env(globals{}))
+	globals := map[string]interface{}{
+		"elapsed": time.Duration(0),
+		"int":     func(v float64) int { return int(v) },
+		"round":   math.Round,
+		"floor":   math.Floor,
+		"ceil":    math.Ceil,
+	}
+
+	program, err := expr.Compile(*expression, expr.Env(globals))
 	if err != nil {
 		fmt.Printf("Invalid expression: %v\n", err)
 		os.Exit(1)
@@ -47,7 +52,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	result, err := expr.Run(program, globals{Elapsed: elapsed})
+	globals["elapsed"] = elapsed
+	result, err := expr.Run(program, globals)
 	if err != nil {
 		panic(err)
 	}
