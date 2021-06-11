@@ -2,6 +2,7 @@ package rctfgolf
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
@@ -12,7 +13,7 @@ func unixMillisToTime(millis int64) time.Time {
 	return time.Unix(millis/1000, millis%1000*int64(time.Millisecond))
 }
 
-func CalculateWithClient(c *api.APIClient, chall string) (time.Duration, error) {
+func calculateWithClient(c *api.APIClient, chall string) (time.Duration, error) {
 	if debug, ok := os.LookupEnv("RCTF_GOLF_DEBUG"); ok {
 		elapsed, err := time.ParseDuration(debug)
 		if err != nil {
@@ -46,6 +47,10 @@ func CalculateWithClient(c *api.APIClient, chall string) (time.Duration, error) 
 	return elapsed, nil
 }
 
-func Calculate(baseURL string, chall string) (time.Duration, error) {
-	return CalculateWithClient(api.NewClient(baseURL), chall)
+func GetTime(baseURL string, chall string) (time.Duration, error) {
+	return calculateWithClient(api.NewClient(baseURL), chall)
+}
+
+func GetTimeWithClient(baseURL string, chall string, client *http.Client) (time.Duration, error) {
+	return calculateWithClient(api.NewClientWithHTTPClient(baseURL, client), chall)
 }

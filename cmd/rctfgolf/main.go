@@ -43,7 +43,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	elapsed, err := rctfgolf.Calculate(*baseURL, *challID)
+	elapsed, err := rctfgolf.GetTime(*baseURL, *challID)
 	if err != nil {
 		panic(err)
 	}
