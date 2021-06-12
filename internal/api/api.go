@@ -81,7 +81,7 @@ func (c *APIClient) GetChallengeSolves(challID string, params GetChallengeSolves
 	qs := url.Values{}
 	qs.Add("limit", fmt.Sprint(params.Limit))
 	qs.Add("offset", fmt.Sprint(params.Offset))
-	resp, err := c.httpClient.Get(c.baseURL + fmt.Sprintf("/api/v1/challs/%s/solves?%s", challID, qs.Encode()))
+	resp, err := c.httpClient.Get(c.baseURL + fmt.Sprintf("/api/v1/challs/%s/solves?%s", url.PathEscape(challID), qs.Encode()))
 	if err != nil {
 		return nil, err
 	}

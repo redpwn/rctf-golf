@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func main() {
+func run() error {
 	baseURL := pflag.StringP("base-url", "u", "", "Base URL of rCTF")
 	challID := pflag.StringP("chall-id", "c", "", "Challenge ID")
 	expression := pflag.StringP("function", "f", "", "Value expression to evaluate")
@@ -19,17 +19,17 @@ func main() {
 	pflag.Parse()
 
 	if *baseURL == "" {
-		fmt.Println("Must provide base-url\n")
+		fmt.Fprint(os.Stderr, "Must provide base-url\n\n")
 		pflag.Usage()
 		os.Exit(2)
 	}
 	if *challID == "" {
-		fmt.Println("Must provide chall-id\n")
+		fmt.Fprint(os.Stderr, "Must provide chall-id\n\n")
 		pflag.Usage()
 		os.Exit(2)
 	}
 	if *expression == "" {
-		fmt.Println("Must provide function\n")
+		fmt.Fprint(os.Stderr, "Must provide function\n\n")
 		pflag.Usage()
 		os.Exit(2)
 	}
@@ -44,19 +44,26 @@ func main() {
 
 	program, err := expr.Compile(*expression, expr.Env(globals))
 	if err != nil {
-		fmt.Printf("Invalid expression: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("invalid expression: %w", err)
 	}
 
 	elapsed, err := rctfgolf.GetTime(*baseURL, *challID)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	globals["elapsed"] = elapsed
 	result, err := expr.Run(program, globals)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	fmt.Println(result)
+	return nil
+}
+
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

@@ -17,10 +17,10 @@ func calculateWithClient(c *api.APIClient, chall string) (time.Duration, error) 
 	if debug, ok := os.LookupEnv("RCTF_GOLF_DEBUG"); ok {
 		elapsed, err := time.ParseDuration(debug)
 		if err != nil {
-			panic(fmt.Errorf("Illegal debug elapsed time value: %w", err))
+			return 0, fmt.Errorf("illegal debug elapsed time value: %w", err)
 		}
 		if int64(elapsed) < 0 {
-			panic("Cannot set debug with negative elapsed time!")
+			return 0, fmt.Errorf("cannot set debug with negative elapsed time")
 		}
 		return elapsed, nil
 	}
