@@ -37,9 +37,12 @@ func run() error {
 	globals := map[string]interface{}{
 		"elapsed": time.Duration(0),
 		"int":     func(v float64) int { return int(v) },
+		"float":   func(v int) float64 { return float64(v) },
 		"round":   math.Round,
 		"floor":   math.Floor,
 		"ceil":    math.Ceil,
+		"min":     math.Min,
+		"max":     math.Max,
 	}
 
 	program, err := expr.Compile(*expression, expr.Env(globals))
